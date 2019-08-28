@@ -1,0 +1,19 @@
+﻿
+<h1>@ViewData["Title"]</h1>
+
+<p>@ViewData["Name"]</p>
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+<button type="button" onclick="ajaxtest();">我是按鈕</button>
+
+<div class="result" style="background=red"></div>
+
+<!-- 此部分只是實作jquery call ajax 方式 -->
+<Script>function ajaxtest() {
+    $.post("https://localhost:5001/Home/Ajax", function (data) {
+        $(".result").html(data + "我來自於AJAX");
+    });
+}</Script>
