@@ -1,19 +1,178 @@
 ﻿
-<h1>@ViewData["Title"]</h1>
+<div id="dialog-form" title="Create new user">
+    <form>
+        <fieldset>
+            <label for="name">Name</label>
+            <input class="text ui-widget-content ui-corner-all" id="name" name="name" type="text" value="">
 
-<p>@ViewData["Name"]</p>
+            <label for="address">address</label>
+            <input class="text ui-widget-content ui-corner-all" id="address" name="address" type="text" value="">
+            <input class="text ui-widget-content ui-corner-all" hidden id="id" name="id" type="text" value="">
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input style="position:absolute; top:-1000px" tabindex="-1" type="submit">
+        </fieldset>
+    </form>
+</div>
 
+<button id="create-user">Create new user</button>
+<table id="example" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>address</th>
+            <th>function</th>
+</thead>
+    <tbody>
+        @foreach (var items in ViewData["Data"] as List<AndyNetTest.Entities.UsersAndInfo.UsersAndInfo>)
+    {
+        <tr>
+            <td>@items.ID</td>
+            <td>@items.Name</td>
+            <td>@items.Address</td>
+            <td><button type="button" onclick="update('@items.ID','@items.Name','@items.Address');">更新</button></td>
+        </tr>
+}
 
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"
-        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-        crossorigin="anonymous"></script>
-<button type="button" onclick="ajaxtest();">我是按鈕</button>
-
-<div class="result" style="background=red"></div>
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>address</th>
+            <th>function</th>
+        </tr>
+    </tfoot>
+</table>
 
 <!-- 此部分只是實作jquery call ajax 方式 -->
-<Script>function ajaxtest() {
-    $.post("https://localhost:5001/Home/Ajax", function (data) {
-        $(".result").html(data + "我來自於AJAX");
-    });
-}</Script>
+<Script>var update;
+    $(document).ready(function () {
+        $('#example').DataTable();
+        var dialog, dialog2, form,
+            id = $("#id"),
+            name = $("#name"),
+            address = $("#address"),
+            allFields = $([]).add(name).add(address),
+            tips = $(".validateTips");
+
+        function updateTips(t) {
+            tips.text(t).addClass("ui-state-highlight");
+            setTimeout(function () {
+                tips.removeClass("ui-state-highlight", 1500);
+            }, 500);
+        }
+
+        function checkLength(o, n, min, max) {
+            if (o.val().length > max || o.val().length < min) {
+                o.addClass("ui-state-error");
+                updateTips("Length of " + n + " must be between " + min + " and " + max + ".");
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function checkRegexp(o, regexp, n) {
+            if (!(regexp.test(o.val()))) {
+                o.addClass("ui-state-error");
+                updateTips(n);
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        update = function (_id, _name, _address) {
+            id.val(_id);
+            name.val(_name);
+            address.val(_address);
+            dialog2.dialog("open");
+        }
+
+        function updateserver() {
+            var valid = true;
+            allFields.removeClass("ui-state-error");
+
+            var name = $("#name");
+            var id = $("#id");
+            var address = $("#address");
+
+          
+            if (valid) {
+                $.get("https://localhost:5001/Home/Update", { id: id.val(), name: name.val(), address: address.val() }, function (data) {
+                    $(".result").html(data);
+                    alert(data);
+                    dialog.dialog("close");
+                    location.reload();
+                });
+            }
+        }
+
+        function addUser() {
+            var valid = true;
+            allFields.removeClass("ui-state-error");
+
+            if (!checkLength(name, "username", 3, 16)) {
+                alert("username 太短");
+                valid = false;
+
+            }
+
+            if (!checkLength(address, "address", 6, 100)) {
+                alert("address 太短");
+                valid = false;
+            }
+
+            if (valid) {
+                $.get("https://localhost:5001/Home/AjaxCreateUser", { name: name.val(), address: address.val() }, function (data) {
+                    $(".result").html(data);
+                    alert(data);
+                    dialog.dialog("close");
+                    location.reload();
+                });
+            }
+            return valid;
+        }
+        dialog = $("#dialog-form").dialog({
+            autoOpen: false,
+            height: 400,
+            width: 350,
+            modal: true,
+            buttons: {
+                "Create an Name": addUser,
+                Cancel: function () {
+                    dialog.dialog("close");
+                }
+            },
+            close: function () {
+                form[0].reset();
+                allFields.removeClass("ui-state-error");
+            }
+        });
+
+        dialog2 = $("#dialog-form").dialog({
+            autoOpen: false,
+            height: 400,
+            width: 350,
+            modal: true,
+            buttons: {
+                "update an Name": updateserver,
+                Cancel: function () {
+                    dialog.dialog("close");
+                }
+            },
+            close: function () {
+                form[0].reset();
+                allFields.removeClass("ui-state-error");
+            }
+        });
+
+        form = dialog.find("form").on("submit", function (event) {
+            event.preventDefault();
+            addUser();
+        });
+        $("#create-user").button().on("click", function () {
+            dialog.dialog("open");
+        });
+    });</Script>

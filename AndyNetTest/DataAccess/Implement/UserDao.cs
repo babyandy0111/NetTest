@@ -1,8 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
-using AndyNetTest.Base;
+using AndyNetTest.Base.ApplicationDbContext;
 using AndyNetTest.DataAccess.Interface;
-using Snai.Mysql.Entities;
+using AndyNetTest.Entities.Users;
+using AndyNetTest.Entities.UsersAndInfo;
+using Dapper;
 
 namespace AndyNetTest.DataAccess.Implement
 {
@@ -23,9 +28,20 @@ namespace AndyNetTest.DataAccess.Implement
         }
 
         //取全部記錄
-        public IEnumerable<Users> GetUsers()
+        public IEnumerable<UsersAndInfo> GetUsers()
         {
-            return Context.User.ToList();
+            List<UsersAndInfo> listUser = new List<UsersAndInfo>();
+            var data = (from a in Context.User
+                       join b in Context.UserInfo on a.ID equals b.ID
+                       select new UsersAndInfo()
+                       {
+                           ID=a.ID,
+                          Name = a.Name,
+                          Address = b.Address
+                        }).ToList();
+
+            //return Context.User.ToList();
+            return data;
         }
 
         //取某id記錄
@@ -35,9 +51,9 @@ namespace AndyNetTest.DataAccess.Implement
         }
 
         //根據id更新整條記錄
-        public bool UpdateUser(Users student)
+        public bool UpdateUser(Users user)
         {
-            Context.User.Update(student);
+            Context.User.Update(user);
             return Context.SaveChanges() > 0;
         }
 
@@ -45,11 +61,11 @@ namespace AndyNetTest.DataAccess.Implement
         public bool UpdateNameByID(int id, string name)
         {
             var state = false;
-            var student = Context.User.SingleOrDefault(s => s.ID == id);
+            var tmp = Context.User.SingleOrDefault(s => s.ID == id);
 
-            if (student != null)
+            if (tmp != null)
             {
-                student.Name = name;
+                tmp.Name = name;
                 state = Context.SaveChanges() > 0;
             }
 

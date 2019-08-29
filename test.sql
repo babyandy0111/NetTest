@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： mysql
--- 產生時間： 2019 年 08 月 28 日 11:29
+-- 產生時間： 2019 年 08 月 29 日 16:55
 -- 伺服器版本： 5.7.27-log
 -- PHP 版本： 7.2.19
 
@@ -38,7 +38,14 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`) VALUES
-(1, 'andywang');
+(1, '[object Object]1111'),
+(2, 'sdfsdfsd'),
+(3, 'fsdfsdfsdf'),
+(4, 'fsdfsdfsdf'),
+(5, 'andy'),
+(6, 'fsdfsdfdsfds'),
+(7, 'sdfsfsdf'),
+(8, 'fsdfsdfsdfaf');
 
 -- --------------------------------------------------------
 
@@ -56,7 +63,17 @@ CREATE TABLE `user_info` (
 --
 
 INSERT INTO `user_info` (`id`, `address`) VALUES
-(1, '大馬路');
+(1, '[object Object]2222'),
+(2, 'fsdfdsf'),
+(3, 'sfsdfsdfsdfsf'),
+(4, 'sdfsdfsdfsdf'),
+(5, 'andyandyandy'),
+(6, 'fdsfdsfdsfsf'),
+(7, 'sfsdfsdfsf'),
+(8, 'sfsfsafasdfs'),
+(9, '[object Object]'),
+(10, '[object Object]'),
+(11, '[object Object]2222');
 
 --
 -- 已傾印資料表的索引
@@ -82,13 +99,13 @@ ALTER TABLE `user_info`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `user_info`
 --
 ALTER TABLE `user_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

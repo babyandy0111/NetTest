@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Snai.Mysql.Entities;
+using AndyNetTest.Entities.Users;
+using AndyNetTest.Entities.UserInfo;
 
-namespace AndyNetTest.Base
+namespace AndyNetTest.Base.ApplicationDbContext
 {
     public class ApplicationDbContext : DbContext
     {
@@ -10,5 +11,6 @@ namespace AndyNetTest.Base
         { }
 
         public DbSet<Users> User { get; set; }
+        public DbSet<UserInfo> UserInfo { get; set; }
     }
 }

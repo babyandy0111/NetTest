@@ -18,6 +18,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
+    <PackageReference Include="Dapper" Version="1.60.6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,5 +27,9 @@
     <Folder Include="DataAccess\" />
     <Folder Include="DataAccess\Implement\" />
     <Folder Include="DataAccess\Interface\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Base\UserInfoContext.cs" />
+    <Compile Remove="DataAccess\Interface\IUserDao %28複製%29.cs" />
   </ItemGroup>
 </Project>

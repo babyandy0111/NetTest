@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AndyNetTest.Base;
+using AndyNetTest.Base.ApplicationDbContext;
 using AndyNetTest.DataAccess.Implement;
 using AndyNetTest.DataAccess.Interface;
 using Microsoft.AspNetCore.Builder;
@@ -37,6 +38,7 @@ namespace AndyNetTest
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IUserDao, UserDao>();
+            services.AddScoped<IUserInfoDao, UserInfoDao>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
